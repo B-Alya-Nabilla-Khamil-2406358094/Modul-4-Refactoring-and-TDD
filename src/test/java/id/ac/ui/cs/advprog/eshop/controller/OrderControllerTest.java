@@ -111,4 +111,42 @@ public class OrderControllerTest {
                 .andExpect(model().attributeExists("paymentId"))
                 .andExpect(model().attributeExists("status"));
     }
+
+    @Test
+    void testPostPayOrderBankTransfer() throws Exception {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("bankName", "BCA");
+        paymentData.put("referenceCode", "REF123456");
+
+        Payment payment = new Payment("pay-002", order,
+                PaymentMethod.BANK_TRANSFER.getValue(), paymentData);
+
+        when(orderService.findById(anyString())).thenReturn(order);
+        when(paymentService.addPayment(any(), anyString(), any())).thenReturn(payment);
+
+        mockMvc.perform(post("/order/pay/13652556-012a-4c07-b546-54eb1396d79b")
+                        .param("paymentMethod", "BANK_TRANSFER")
+                        .param("bankName", "BCA")
+                        .param("referenceCode", "REF123456"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("order/payResult"))
+                .andExpect(model().attributeExists("paymentId"))
+                .andExpect(model().attributeExists("status"));
+    }
+
+    @Test
+    void testPostPayOrderUnknownMethod() throws Exception {
+        Map<String, String> paymentData = new HashMap<>();
+
+        Payment payment = new Payment("pay-003", order,
+                PaymentMethod.VOUCHER.getValue(), paymentData);
+
+        when(orderService.findById(anyString())).thenReturn(order);
+        when(paymentService.addPayment(any(), anyString(), any())).thenReturn(payment);
+
+        mockMvc.perform(post("/order/pay/13652556-012a-4c07-b546-54eb1396d79b")
+                        .param("paymentMethod", "OTHER"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("order/payResult"));
+    }
 }

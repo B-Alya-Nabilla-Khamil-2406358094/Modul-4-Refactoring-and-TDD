@@ -163,4 +163,36 @@ public class PaymentTest {
         assertThrows(IllegalArgumentException.class,
                 () -> payment.setStatus("INVALID_STATUS"));
     }
+
+    @Test
+    void testPaymentMethodContainsValidMethod() {
+        assertTrue(PaymentMethod.contains("VOUCHER"));
+        assertTrue(PaymentMethod.contains("BANK_TRANSFER"));
+    }
+
+    @Test
+    void testPaymentMethodContainsInvalidMethod() {
+        assertFalse(PaymentMethod.contains("INVALID_METHOD"));
+    }
+
+    @Test
+    void testCreatePaymentVoucherNullCode() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", null);
+
+        Payment payment = new Payment("pay-012", order,
+                PaymentMethod.VOUCHER.getValue(), paymentData);
+
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
+    }
+
+    @Test
+    void testCreatePaymentUnknownMethod() {
+        Map<String, String> paymentData = new HashMap<>();
+
+        Payment payment = new Payment("pay-013", order,
+                "UNKNOWN_METHOD", paymentData);
+
+        assertEquals(PaymentStatus.WAITING_PAYMENT.getValue(), payment.getStatus());
+    }
 }

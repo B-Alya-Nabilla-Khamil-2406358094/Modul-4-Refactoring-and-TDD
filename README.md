@@ -95,3 +95,33 @@ Siklus otomatis dari tahap pengetesan hingga aplikasi siap diakses oleh pengguna
 - **Tanpa LSP:** Inheritance yang salah seperti `CarController extends ProductController` bisa menyebabkan method Product ikut ter-expose di endpoint `/car` secara tidak sengaja, dan perilaku program menjadi tidak konsisten.
 - **Tanpa ISP:** Jika `CarService` memiliki method yang tidak relevan untuk `CarController`, setiap perubahan pada method tersebut tetap berdampak pada semua client yang mengimplementasikan interface itu, meskipun mereka tidak menggunakannya.
 - **Tanpa DIP:** Jika `CarController` langsung bergantung pada `CarServiceImpl`, proses testing dengan mock service membutuhkan perubahan banyak kode, dan mengganti implementasi service berarti harus mengubah controller juga.
+
+## Refleksi Module 4
+
+### 1. TDD Flow
+
+Setelah mengikuti alur kerja Test-Driven Development dalam tutorial dan latihan ini, saya merasa alur TDD cukup berguna. Berdasarkan pertanyaan self-reflective yang diusulkan oleh Percival (2017), saya merefleksikan pengalaman saya sebagai berikut:
+
+Alur TDD (RED → GREEN → REFACTOR) membantu saya untuk lebih memahami requirements sebelum menulis kode implementasi. Dengan menulis tes terlebih dahulu, saya dipaksa untuk memikirkan behavior yang diharapkan dari setiap method sebelum mengimplementasikannya. Hal ini membuat saya lebih yakin bahwa kode yang saya tulis benar-benar memenuhi kebutuhan yang ada.
+
+Selain itu, TDD juga membantu saya dalam proses refactoring. Karena sudah ada tes yang memverifikasi behavior, saya bisa melakukan refactoring (seperti mengganti hardcoded string dengan enum `OrderStatus`) dengan lebih percaya diri tanpa khawatir merusak fungsionalitas yang sudah ada. Jika ada yang rusak, tes akan langsung memberitahu saya.
+
+Namun, ada beberapa hal yang perlu saya perhatikan ke depannya. Saya menyadari bahwa terkadang saya masih cenderung menulis kode implementasi dahulu baru kemudian membuat tesnya. Ke depannya, saya perlu lebih disiplin dalam mengikuti siklus RED-GREEN-REFACTOR secara ketat, yaitu selalu memastikan tes gagal terlebih dahulu sebelum menulis implementasi, sehingga saya benar-benar yakin bahwa tes yang saya tulis memang menguji fungsionalitas yang benar.
+
+### 2. F.I.R.S.T. Principle
+
+Setelah merefleksikan unit test yang telah saya buat dalam tutorial, saya mengevaluasi apakah tes-tes tersebut sudah mengikuti prinsip F.I.R.S.T.:
+
+**Fast**: Tes yang saya buat sudah cukup cepat karena menggunakan mock untuk mengisolasi dependensi seperti `OrderRepository`. Dengan Mockito, tes tidak perlu mengakses database atau resource eksternal sehingga eksekusinya cepat.
+
+**Isolated/Independent**: Tes-tes saya sudah cukup terisolasi satu sama lain. Setiap tes menggunakan `@BeforeEach` untuk menyiapkan data baru sehingga tidak ada ketergantungan antar tes. Namun, saya perlu lebih memperhatikan bahwa setiap tes hanya menguji satu hal spesifik saja.
+
+**Repeatable**: Tes saya sudah repeatable karena tidak bergantung pada state eksternal seperti database atau waktu sistem. Setiap kali dijalankan, tes menghasilkan hasil yang sama.
+
+**Self-validating**: Tes sudah self-validating karena menggunakan assertion seperti `assertEquals`, `assertNull`, `assertTrue`, dan `assertThrows` yang secara otomatis menentukan apakah tes lulus atau gagal tanpa perlu pengecekan manual.
+
+**Timely**: Pada beberapa bagian, saya akui masih belum sepenuhnya timely karena terkadang baru membuat tes setelah kode implementasi sudah ada. Ke depannya, saya akan lebih disiplin menulis tes tepat sebelum menulis kode implementasi agar benar-benar mengikuti prinsip TDD.
+
+Secara keseluruhan, tes yang saya buat sudah cukup mengikuti prinsip F.I.R.S.T., namun masih ada ruang untuk perbaikan terutama pada aspek **Timely** dan memastikan setiap tes benar-benar hanya menguji satu hal spesifik untuk meningkatkan **Isolation**.
+
+![img.png](img.png)

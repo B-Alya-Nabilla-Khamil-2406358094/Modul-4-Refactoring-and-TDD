@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CarRepositoryTest {
+public class CarRepositoryTest {
 
     private CarRepository carRepository;
     private Car car;
@@ -74,6 +74,13 @@ class CarRepositoryTest {
     }
 
     @Test
+    void testFindByIdNotFoundAfterCreate() {
+        carRepository.create(car);
+        Car found = carRepository.findById("id-yang-tidak-ada");
+        assertNull(found);
+    }
+
+    @Test
     void testUpdateFound() {
         Car created = carRepository.create(car);
 
@@ -101,6 +108,19 @@ class CarRepositoryTest {
     }
 
     @Test
+    void testUpdateNotFoundAfterCreate() {
+        carRepository.create(car);
+
+        Car updatedCar = new Car();
+        updatedCar.setCarName("Honda");
+        updatedCar.setCarColor("Blue");
+        updatedCar.setCarQuantity(10);
+
+        Car result = carRepository.update("id-yang-tidak-ada", updatedCar);
+        assertNull(result);
+    }
+
+    @Test
     void testDeleteFound() {
         Car created = carRepository.create(car);
         String id = created.getCarId();
@@ -114,10 +134,8 @@ class CarRepositoryTest {
     void testDeleteNotFound() {
         carRepository.create(car);
 
-        // delete id yang tidak ada — tidak boleh throw exception
         assertDoesNotThrow(() -> carRepository.delete("not-exist"));
 
-        // data asli masih ada
         Iterator<Car> iterator = carRepository.findAll();
         assertTrue(iterator.hasNext());
     }

@@ -1,7 +1,10 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
+import enums.OrderStatus;
+import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +27,14 @@ class OrderRepositoryTest {
         products.add(product1);
 
         orders = new ArrayList<>();
-        Order order1 = new Order(id: "13652556-012a-4c07-b546-54eb1396d79b",
-                products, orderTime: 1708560000L, author: "Safira Sudrajat");
+        Order order1 = new Order("13652556-012a-4c07-b546-54eb1396d79b",
+                products, 1708560000L, "Safira Sudrajat");
         orders.add(order1);
-        Order order2 = new Order(id: "7f9e15bb-4b15-42f4-aebc-c3af385fb078",
-                products, orderTime: 1708570000L, author: "Safira Sudrajat");
+        Order order2 = new Order("7f9e15bb-4b15-42f4-aebc-c3af385fb078",
+                products, 1708570000L, "Safira Sudrajat");
         orders.add(order2);
-        Order order3 = new Order(id: "e334ef40-9eff-4da8-9487-8ee697ecbf1e",
-                products, orderTime: 1708570000L, author: "Bambang Sudrajat");
+        Order order3 = new Order("e334ef40-9eff-4da8-9487-8ee697ecbf1e",
+                products, 1708570000L, "Bambang Sudrajat");
         orders.add(order3);
     }
 
@@ -95,7 +98,7 @@ class OrderRepositoryTest {
 
         List<Order> orderList = orderRepository.findAllByAuthor(
                 orders.get(1).getAuthor());
-        assertEquals(expected: 2, orderList.size());
+        assertEquals(2, orderList.size());
     }
 
     @Test
@@ -105,13 +108,5 @@ class OrderRepositoryTest {
         List<Order> orderList = orderRepository.findAllByAuthor(
                 orders.get(1).getAuthor().toLowerCase());
         assertTrue(orderList.isEmpty());
-    }
-
-    @Repository
-    public class OrderRepository {
-        private List<Order> orderData = new ArrayList<>();
-        public Order save(Order order) {return null;}
-        public Order findById(String id) {return null;}
-        public List<Order> findAllByAuthor(String author) {return null;}
     }
 }

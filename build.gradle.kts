@@ -90,7 +90,7 @@ tasks.jacocoTestReport {
 
 sonar {
     properties {
-        property("sonar.projectKey", "B-Alya-Nabilla-Khamil-2406358094_Modul-1-Coding-Standards")
+        property("sonar.projectKey", "B-Alya-Nabilla-Khamil-2406358094_Modul-4-Refactoring-and-TDD")
         property("sonar.organization", "b-alya-nabilla-khamil-2406358094")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")

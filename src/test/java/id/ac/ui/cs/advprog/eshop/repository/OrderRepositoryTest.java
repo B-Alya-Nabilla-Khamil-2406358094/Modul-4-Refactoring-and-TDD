@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderRepositoryTest {
+public class OrderRepositoryTest {
     OrderRepository orderRepository;
     List<Order> orders;
 
